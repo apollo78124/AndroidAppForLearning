@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -27,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
     String currentPhotoPath;
     private Button buttonLeft,buttonRight;
     private ImageSwitcher sw;
-    private String[] pathnames;
+    private File storageDir;
+    private String[] imageList;
     private int currentPicPosition;
+    private File imgFile;
 
     private void setPic() {
         // Get the dimensions of the View
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -118,19 +121,53 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView1 = (ImageView) findViewById(R.id.imageView1);
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-        File f = new File("D:/Programming");
+        storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
         // Populates the array with names of files and directories
-        pathnames = storageDir.list();
-
-        File imgFile = new  File(storageDir + "/" + pathnames[0]);
+        imageList = storageDir.list();
+        currentPicPosition = 0;
+        imgFile = new  File(storageDir + "/" + imageList[currentPicPosition]);
         imageView1.setImageResource(R.drawable.ic_launcher_background);
-        if(imgFile.exists()){
+        if(imgFile.exists()) {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             imageView1.setImageBitmap(myBitmap);
         }
+
+        buttonLeft =(Button) findViewById(R.id.buttonLeft);
+        buttonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPicPosition < 1) {
+                    currentPicPosition = imageList.length - 1;
+                } else {
+                    currentPicPosition--;
+                }
+
+                imgFile = new  File(storageDir + "/" + imageList[currentPicPosition]);
+                if(imgFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    imageView1.setImageBitmap(myBitmap);
+                }
+            }
+        });
+
+        buttonRight =(Button) findViewById(R.id.buttonRight);
+        buttonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPicPosition > imageList.length - 2) {
+                    currentPicPosition = 0;
+                } else {
+                    currentPicPosition++;
+                }
+
+                imgFile = new  File(storageDir + "/" + imageList[currentPicPosition]);
+                if(imgFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    imageView1.setImageBitmap(myBitmap);
+                }
+            }
+        });
     }
 
     @Override
