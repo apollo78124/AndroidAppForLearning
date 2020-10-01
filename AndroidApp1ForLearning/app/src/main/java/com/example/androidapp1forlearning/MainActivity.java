@@ -133,21 +133,11 @@ public class MainActivity extends AppCompatActivity {
             imageView1.setImageBitmap(myBitmap);
         }
 
-        buttonLeft =(Button) findViewById(R.id.buttonLeft);
+        buttonLeft = (Button) findViewById(R.id.buttonLeft);
         buttonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentPicPosition < 1) {
-                    currentPicPosition = imageList.length - 1;
-                } else {
-                    currentPicPosition--;
-                }
-
-                imgFile = new  File(storageDir + "/" + imageList[currentPicPosition]);
-                if(imgFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imageView1.setImageBitmap(myBitmap);
-                }
+                imageLeft();
             }
         });
 
@@ -155,19 +145,37 @@ public class MainActivity extends AppCompatActivity {
         buttonRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentPicPosition > imageList.length - 2) {
-                    currentPicPosition = 0;
-                } else {
-                    currentPicPosition++;
-                }
-
-                imgFile = new  File(storageDir + "/" + imageList[currentPicPosition]);
-                if(imgFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imageView1.setImageBitmap(myBitmap);
-                }
+                imageRight();
             }
         });
+    }
+
+    private void imageLeft() {
+        if (currentPicPosition < 1) {
+            currentPicPosition = imageList.length - 1;
+        } else {
+            currentPicPosition--;
+        }
+
+        imgFile = new  File(storageDir + "/" + imageList[currentPicPosition]);
+        if(imgFile.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            imageView1.setImageBitmap(myBitmap);
+        }
+    }
+
+    private void imageRight() {
+        if (currentPicPosition > imageList.length - 2) {
+            currentPicPosition = 0;
+        } else {
+            currentPicPosition++;
+        }
+
+        imgFile = new  File(storageDir + "/" + imageList[currentPicPosition]);
+        if(imgFile.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            imageView1.setImageBitmap(myBitmap);
+        }
     }
 
     @Override
